@@ -18,11 +18,17 @@ class Coche:
             if self.gasolina > (self.consumo * km):
                 self.kilometros_recorridos += km
                 Coche.km_totales_por_marca[self.marca] += km
+                self.gasolina -= km * self.consumo
 
             else:
                 print(f'No tienes gasolina suficiente para recorrer {km} km')
         else:
             print("El coche no tiene gasolina...")
+
+    @classmethod
+    def obtener_km_por_marca(cls, marca):
+
+        return cls.km_totales_por_marca.get(marca, 0)
 
     def repostar(self, litros):
         self.gasolina += litros
@@ -36,3 +42,11 @@ class Persona:
         self.apellido = apellido
         # El atributo coche es opcional; si no se pasa, es None (sin coche)
         self.coche = coche
+
+    def vender_coche(self, a_persona):
+        if self.coche is not None and a_persona.coche is None:
+            a_persona.coche = self.coche
+            self.coche = None
+
+        else:
+            print(f'Error en la venta: Verifica que {self.nombre} tenga coche y que {a_persona.nombre} no tenga uno ya.')
