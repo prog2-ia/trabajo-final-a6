@@ -7,14 +7,26 @@ class Coche:
         self.marca = marca
         self.kilometros_recorridos = 0
         self.gasolina = 0
+        self.consumo = 0.05
 
         # Si la marca no existe en el registro global, la inicializamos a 0
         if self.marca not in Coche.km_totales_por_marca:
             Coche.km_totales_por_marca[self.marca] = 0
 
-    def conducir(self, km):
-        self.kilometros_recorridos += km
-        Coche.km_totales_por_marca[self.marca] += km
+    def avanzar(self, km):
+        if self.gasolina > 0:
+            if self.gasolina > (self.consumo * km):
+                self.kilometros_recorridos += km
+                Coche.km_totales_por_marca[self.marca] += km
+
+            else:
+                print(f'No tienes gasolina suficiente para recorrer {km} km')
+        else:
+            print("El coche no tiene gasolina...")
+
+    def repostar(self, litros):
+        self.gasolina += litros
+        print(f'Has repostado {litros} litros de gasolina')
 
 
 class Persona:
