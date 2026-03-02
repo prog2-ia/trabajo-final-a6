@@ -1,4 +1,5 @@
-from entidades import Coche, Persona
+from coche import Coche
+from persona import Persona
 
 # Crear dos coches
 coche_juan = Coche("1234-ABC", "Toyota")
