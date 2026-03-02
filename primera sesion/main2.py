@@ -4,18 +4,24 @@ from persona import Persona
 # Crear dos coches
 coche_juan = Coche("1234-ABC", "Toyota")
 
+coche_pedro = Coche("6978-ART", "Tesla")
+
 
 # Simular que el coche de Juan recorre algunos km
 coche_juan.avanzar(150)
+coche_pedro.avanzar(100)
 
 
 coche_juan.repostar(100)
 coche_juan.avanzar(150)
+coche_pedro.recargar(70)
+coche_pedro.avanzar(100)
 
 persona1 = Persona("11223344A", "Juan", "Pérez", coche_juan)
 
+persona2 = Persona("78242856R", "Eusebio", "Franco")
 
-persona2 = Persona("55667788B", "Marta", "García")
+persona3 = Persona("55667788B", "Pedro", "Barbu", coche_pedro)
 
 #Pruebas de venta
 persona1.vender_coche(persona2)
