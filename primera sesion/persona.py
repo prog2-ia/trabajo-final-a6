@@ -3,7 +3,6 @@ class Persona:
         self.dni = dni
         self.nombre = nombre
         self.apellido = apellido
-        # El atributo coche es opcional; si no se pasa, es None (sin coche)
         self.coche = coche
 
     def vender_coche(self, a_persona):
