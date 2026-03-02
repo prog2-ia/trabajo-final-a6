@@ -37,9 +37,6 @@ class CocheCombustion(Coche):
         else:
             print("El coche no tiene gasolina...")
 
-    @classmethod
-    def obtener_km_por_marca(cls, marca):
-        super().obtener_km_por_marca()
 
     def repostar(self, litros):
         self.gasolina += litros
@@ -47,7 +44,7 @@ class CocheCombustion(Coche):
 
 
 
-class CocheElectricto(Coche):
+class CocheElectrico(Coche):
     def __init__(self, matricula, marca):
         super().__init__(matricula, marca)
         self.consumo = 0.02
@@ -68,4 +65,4 @@ class CocheElectricto(Coche):
 
     def recargar(self, kw):
         self.bateria += kw
-        print(f'Has recargado {kw} kw'<)
+        print(f'Has recargado {kw} kw')

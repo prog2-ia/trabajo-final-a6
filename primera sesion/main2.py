@@ -1,10 +1,10 @@
-from coche import Coche
+from coche import Coche, CocheCombustion, CocheElectrico
 from persona import Persona
 
 # Crear dos coches
-coche_juan = Coche("1234-ABC", "Toyota")
+coche_juan = CocheCombustion("1234-ABC", "Toyota")
 
-coche_pedro = Coche("6978-ART", "Tesla")
+coche_pedro = CocheElectrico("6978-ART", "Tesla")
 
 
 # Simular que el coche de Juan recorre algunos km
@@ -31,8 +31,8 @@ print(f'Persona 1: {persona1.nombre}, Coche: {persona1.coche.marca if persona1.c
 print(f'Persona 2: {persona2.nombre}, Coche: {persona2.coche.marca if persona2.coche else "Sin coche"}')
 
 print("\n FORZANDO ERROR DE VENTA")
-# Si Juan intenta vender de nuevo, debería saltar tu print de error
 persona1.vender_coche(persona2)
 
 
 print(f"Km totales Toyota en la flota: {Coche.km_totales_por_marca['Toyota']} km")
+print(f"Km totales Tesla en la flota: {Coche.km_totales_por_marca['Tesla']} km")
