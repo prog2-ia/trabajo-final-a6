@@ -1,4 +1,4 @@
-class ErrorFinanzas(Exception):
+class ErrorFinanzas:
     pass
 class ImporteInvalidoError(ErrorFinanzas):
     pass
