@@ -1,4 +1,4 @@
-from coche import Coche, CocheCombustion, CocheElectrico
+from coche import Coche, CocheCombustion, CocheElectrico, CocheHibrido
 from persona import Persona
 
 # Crear dos coches
@@ -6,16 +6,23 @@ coche_juan = CocheCombustion("1234-ABC", "Toyota")
 
 coche_pedro = CocheElectrico("6978-ART", "Tesla")
 
+coche_dunsqui = CocheHibrido("8377-LBK", "Ferrari")
+
+
 
 # Simular que el coche de Juan recorre algunos km
 coche_juan.avanzar(150)
 coche_pedro.avanzar(100)
+coche_dunsqui.avanzar(100)
 
 
 coche_juan.repostar(100)
 coche_juan.avanzar(150)
 coche_pedro.recargar(70)
 coche_pedro.avanzar(100)
+coche_dunsqui.recargar(3)
+coche_dunsqui.repostar(20)
+coche_dunsqui.avanzar(100)
 
 persona1 = Persona("11223344A", "Juan", "Pérez", coche_juan)
 
@@ -36,3 +43,4 @@ persona1.vender_coche(persona2)
 
 print(f"Km totales Toyota en la flota: {Coche.km_totales_por_marca['Toyota']} km")
 print(f"Km totales Tesla en la flota: {Coche.km_totales_por_marca['Tesla']} km")
+print(f"km totales Ferrari en la flota: {Coche.km_totales_por_marca['Ferrari']} km")
