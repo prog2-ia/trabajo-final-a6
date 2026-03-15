@@ -1,19 +1,29 @@
-class Cuenta:
-    def __init__(self, nombre, saldo_inicial = 0):
+from abc import ABC, abstractmethod
+
+class Cuenta (ABC):
+    def __init__(self, nombre, saldo_inicial: float = 0.0):
         self.nombre = nombre
-        self.saldo_actual = saldo_inicial
-        self.historial_transacciones = []
+        self._saldo_actual = saldo_inicial
+        self._historial_transacciones = []
 
-    def registrar_transaccion(self, descripcion, cantidad):
+    @property
+    def saldo(self):
+        return self._saldo_actual
 
-        self.saldo_actual += cantidad
-        self.historial_transacciones.append(f'{descripcion} : {cantidad}')
+    @abstractmethod
+    def obtener_tipo(self):
+
+        pass
+
+    def registrar_transaccion(self,cantidad: float, descripcion: str = ""):
+
+        self._saldo_actual += cantidad
+        self._historial_transacciones.append(f'{descripcion} : {cantidad}')
 
     def transferir(self, cantidad, cuenta_destino):
-        if self.saldo_actual >= cantidad:
+        if self._saldo_actual >= cantidad:
 
             self.registrar_transaccion(f"Transferencia enviada a {cuenta_destino.nombre}", -cantidad)
-
             cuenta_destino.registrar_transaccion(f"Transferencia recibida de {self.nombre}", cantidad)
             print(f"Transferencia de {cantidad}€ realizada con éxito.")
         else:
@@ -22,11 +32,17 @@ class Cuenta:
 
 
 class CuentaAhorro(Cuenta):
-    def __init__(self, nombre, saldo_inicial, objetivo_ahorro):
+    def __init__(self, nombre: str, saldo_inicial: float, objetivo_ahorro: float):
         super().__init__(nombre, saldo_inicial)
         self.objetivo_ahorro = objetivo_ahorro
 
+    def obtener_tipo(self):
+        return "Cuenta Ahorro"
+
 class CuentaPrincipal(Cuenta):
-    def __init__(self, nombre, saldo_inicial):
+    def __init__(self, nombre: str, saldo_inicial: float):
         super().__init__(nombre, saldo_inicial)
+
+    def obtener_tipo(self):
+        return "Cuenta Principal"
 
