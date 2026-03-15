@@ -1,0 +1,4 @@
+# Gestor de Finanzas - Dependencias
+# Actualmente el proyecto utiliza exclusivamente la biblioteca estándar de Python.
+# Este archivo se incluye para cumplir con las buenas prácticas de entornos virtuales
+# y queda preparado para la futura integración de librerías externas.
