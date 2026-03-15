@@ -17,7 +17,7 @@ class GestorFinanzas:
             indice += 1
 
         if cuenta_encontrada:
-            cuenta_encontrada.registrar_transaccion(transaccion_desc, cantidad)
+            cuenta_encontrada.registrar_transaccion(cantidad, transaccion_desc)
             print(f"Movimiento registrado con éxito en {nombre_cuenta}.")
         else:
             print(f"Error: No se encontró la cuenta '{nombre_cuenta}'.")
