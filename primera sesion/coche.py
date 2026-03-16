@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-class Coche:
+class Coche(ABC):
     km_totales_por_marca = {}
 
     def __init__(self, matricula, marca):
@@ -8,17 +8,18 @@ class Coche:
         self.marca = marca
         self.kilometros_recorridos = 0
 
-
         if self.marca not in Coche.km_totales_por_marca:
             Coche.km_totales_por_marca[self.marca] = 0
 
-
-
     @classmethod
     def obtener_km_por_marca(cls, marca):
-
         return cls.km_totales_por_marca.get(marca, 0)
 
+    def __str__(self):
+        return f"Coche {self.marca} (Matrícula: {self.matricula})"
+
+    def __repr__(self):
+        return f"{self.__class__.__name__}('{self.matricula}', '{self.marca}')"
 
 
 class CocheCombustion(Coche):
