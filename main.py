@@ -4,18 +4,18 @@ from gestor import GestorFinanzas
 from transacciones import Transaccion
 
 
-def iniciar_programa():
+def iniciar_programa()-> None:
     gestor = GestorFinanzas()
 
     print("--- Configurando Categorías ---")
-    cat_gastos = Categoria("Gastos Generales")
-    cat_hogar = Categoria("Hogar", cat_gastos)
-    cat_ocio = Categoria("Ocio", cat_gastos)
+    cat_gastos: Categoria = Categoria("Gastos Generales")
+    cat_hogar: Categoria = Categoria("Hogar", cat_gastos)
+    cat_ocio: Categoria = Categoria("Ocio", cat_gastos)
     print(cat_hogar.obtener_ruta())
 
     print("\n--- Creando Cuentas ---")
-    cuenta_diaria = CuentaPrincipal("Mi Cuenta Corriente", 1000.0)
-    cuenta_viaje = CuentaAhorro("Ahorros para Japón", 200.0, 3000.0)
+    cuenta_diaria: CuentaPrincipal = CuentaPrincipal("Mi Cuenta Corriente", 1000.0)
+    cuenta_viaje: CuentaAhorro = CuentaAhorro("Ahorros para Japón", 200.0, 3000.0)
 
     # Añadimos las cuentas al gestor
     gestor.añadir_cuenta(cuenta_diaria)
@@ -39,7 +39,7 @@ def iniciar_programa():
     print("\n--- Generando Informes y Alertas ---")
 
     # Esto creará el archivo 'alertas.log' porque la cuenta corriente está en negativo
-    alertas = gestor.verificar_alertas()
+    alertas: list[str] = gestor.verificar_alertas()
     if len(alertas) > 0:
         print(f"Se han encontrado {len(alertas)} alertas de saldo. Revisa alertas.log")
 
