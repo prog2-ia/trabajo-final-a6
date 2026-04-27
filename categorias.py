@@ -1,6 +1,5 @@
 class Categoria:
-    def __init__(self, nombre: str, categoria_padre= 'Categoria | None', descripcion: str ="")->None:
-        # Definición de los atributos principales de la categoría
+    def __init__(self, nombre: str, categoria_padre=None, descripcion: str ="")->None:
         self.nombre: str = nombre
         self.categoria_padre: 'Categoria | None' = categoria_padre
         self.descripcion: str = descripcion
@@ -8,7 +7,7 @@ class Categoria:
         # Atributo protegido para el manejo interno de subcategorías
         self._subcategorias: list['Categoria'] = []
 
-        # Si se indica un padre, esta categoría se añade automáticamente a su lista de hijos
+        # Si se indica un padre real, esta categoría se añade automáticamente a su lista
         if self.categoria_padre is not None:
             self.categoria_padre.agregar_subcategoria(self)
 
@@ -29,12 +28,12 @@ class Categoria:
         return self.categoria_padre is None
 
     def obtener_subcategorias(self)-> list['Categoria']:
-        # Metodo para acceder a la lista protegida de subcategorías
+        # acceder a la lista protegida de subcategorías
         return self._subcategorias
 
     def __str__(self)-> str:
-        # Retorna la representación visual simple de la categoría y sus hijos
-        return f"Categoría: {self.nombre} (Hijos: {len(self._subcategorias)})"
+        # Retorna la representación visual simple de la categoría
+        return f"Categoría: {self.nombre}"
 
 
 

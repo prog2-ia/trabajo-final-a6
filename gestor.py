@@ -1,63 +1,58 @@
 class GestorFinanzas:
-    def __init__(self)-> None:
-        # Listas privadas para el almacenamiento de datos del sistema
-        self.__cuentas: list[Cuenta] = []
-        self.__presupuestos: list = []
-        self.__categorias: list = []
+    def __init__(self) -> None:
+        # Listas privadas para el almacenamiento de datos
+        self.__cuentas = []
+        self.__presupuestos = []
+        self.__categorias = []
 
-    def registrar_movimiento(self, nombre_cuenta: str, transaccion_desc: str, cantidad: float)-> None:
-        # Busca una cuenta por su nombre y añade una transacción
-        cuenta_encontrada: Cuenta | None = None
-        indice: int = 0
+    def añadir_cuenta(self, cuenta):
+        # Agrega una nueva cuenta a la lista del gestor
+        self.__cuentas.append(cuenta)
 
-        # Búsqueda mediante condición lógica de control
-        while indice < len(self.__cuentas) and cuenta_encontrada is None:
-            if self.__cuentas[indice].nombre == nombre_cuenta:
-                cuenta_encontrada = self.__cuentas[indice]
-            indice += 1
+    def __getitem__(self, index):
+        # Permite acceder a las cuentas por índice o usarlas en un bucle 'for'
+        return self.__cuentas[index]
 
+    def __len__(self):
+        # Devuelve la cantidad total de cuentas registradas
+        return len(self.__cuentas)
+
+    def registrar_movimiento(self, nombre_cuenta, transaccion_desc, cantidad):
+        # Busca la cuenta mediante un bucle controlado por índice y condición
+        cuenta_encontrada = None
+        i = 0
+        while i < len(self.__cuentas) and cuenta_encontrada is None:
+            if self.__cuentas[i].nombre == nombre_cuenta:
+                cuenta_encontrada = self.__cuentas[i]
+            i += 1
+
+        # Si se localiza la cuenta, se procede al registro
         if cuenta_encontrada:
             cuenta_encontrada.registrar_transaccion(cantidad, transaccion_desc)
-            print(f"Movimiento registrado con éxito en {nombre_cuenta}.")
         else:
             print(f"Error: No se encontró la cuenta '{nombre_cuenta}'.")
 
-    def verificar_alertas(self)-> list[str]:
-        # Identifica cuentas con saldo negativo y genera un registro de errores
-        alertas: list[str] = []
-
+    def verificar_alertas(self):
+        # Identifica cuentas en negativo y genera el log de alertas
+        alertas = []
         for c in self.__cuentas:
-            # Validación de balance disponible
             if c.saldo < 0:
                 alertas.append(f"¡Alerta! La cuenta '{c.nombre}' tiene saldo negativo: {c.saldo}€")
 
-        if len(alertas) > 0:
-            texto_para_guardar = "\n".join(alertas)
-            self.exportar_a_texto("alertas.log", texto_para_guardar)
-
+        if alertas:
+            self.exportar_a_texto("alertas.log", "\n".join(alertas))
         return alertas
 
-    def generar_informe_mensual(self, mes: int, año: int)-> str:
-        # Compila el estado de todas las cuentas en un documento de texto externo
-        resumen: str = f"--- INFORME MENSUAL {mes}/{año} ---\n"
-
+    def generar_informe_mensual(self, mes, año):
+        # Crea un resumen de todas las cuentas en un archivo de texto
+        resumen = f"--- INFORME MENSUAL {mes}/{año} ---\n"
         for cuenta in self.__cuentas:
-            # Concatenación de detalles de cuenta y saldo actual
-            resumen += f"Cuenta: {cuenta.nombre} ({cuenta.obtener_tipo()}) | Saldo: {cuenta.saldo}€\n"
+            resumen += f"Cuenta: {cuenta.nombre} | Saldo: {cuenta.saldo}€\n"
 
-        nombre_archivo: str = f"informe_{año}_{mes}.txt"
-        self.exportar_a_texto(nombre_archivo, resumen)
-        return resumen
+        self.exportar_a_texto(f"informe_{año}_{mes}.txt", resumen)
 
-    def exportar_a_texto(self, nombre_archivo: str, datos: str) -> str :
-        # Realiza la escritura física de datos en disco (para la realización de este metodo hemos utilizado la ayuda de gemini)
-        archivo = open(nombre_archivo, "w", encoding="utf-8")
-        archivo.write(datos)
-        archivo.close()
-
-        print(f"Archivo '{nombre_archivo}' guardado correctamente.")
-
-    def añadir_cuenta(self, cuenta)-> None :
-        # Permite la inserción de objetos cuenta en el registro privado
-        self.__cuentas.append(cuenta)
+    def exportar_a_texto(self, nombre_archivo, datos):
+        # Escribe los datos proporcionados en un archivo físico
+        with open(nombre_archivo, "w", encoding="utf-8") as archivo:
+            archivo.write(datos)
 

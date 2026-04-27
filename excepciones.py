@@ -1,48 +1,51 @@
-class ErrorFinanzas():
-    #Esta es la clase base de la que heredaran los errores del sistema
+class ErrorFinanzas(Exception):
+    # Clase base para todas las excepciones del sistema
     pass
+
 class ImporteInvalidoError(ErrorFinanzas):
     def __init__(self, importe_erroneo):
+        # Almacena el valor incorrecto que causó el error
         self.importe_erroneo = importe_erroneo
-        #Recibira el importe invalido que provoco el fallo.
 
     def __str__(self):
-        # Nos hará una representación del error y nos indicará que importe falló
-
-        pass
-
+        # Devuelve el mensaje de error para importes negativos o nulos
+        return f"ImporteInvalidoError: El valor {self.importe_erroneo}€ no es válido (debe ser > 0)."
 
 class FechaInvalidaError(ErrorFinanzas):
     def __init__(self, fecha_erronea):
-        # Guardará la fecha erronea para mostrarla
-        pass
+        # Guarda la fecha con formato incorrecto
+        self.fecha_erronea = fecha_erronea
+
     def sugerir_formato(self):
-        #Sugerira un formato correcto.
-        pass
+        # Indica el formato de fecha esperado por el sistema
+        return "Formato sugerido: MM/AAAA o DD/MM/AAAA."
 
     def __str__(self):
-        # Devolverá el mensaje de error
-        pass
+        # Muestra el error de fecha junto con la sugerencia de formato
+        return f"FechaInvalidaError: '{self.fecha_erronea}' no es válida. {self.sugerir_formato()}"
 
 class SaldoInsuficienteError(ErrorFinanzas):
     def __init__(self, saldo_actual, cantidad_intentada):
-        # Almacenará cuánto dinero había en la cuenta y cuánto se intentó sacar o transferir.
-        pass
+        # Registra el estado de la cuenta y el importe fallido
+        self.saldo_actual = saldo_actual
+        self.cantidad_intentada = cantidad_intentada
 
     def calcular_diferencia(self):
-        # Calculará cuánto dinero faltaba para poder hacer la operación.
-        pass
+        # Calcula el dinero restante necesario para la operación
+        return self.cantidad_intentada - self.saldo_actual
 
     def __str__(self):
-        # Mensaje de error diciendo el saldo actual y el intento fallido.
-        pass
+        # Detalla la falta de fondos y la diferencia calculada
+        return (f"SaldoInsuficienteError: Intento de {self.cantidad_intentada}€ "
+                f"en cuenta con solo {self.saldo_actual}€. Faltan {self.calcular_diferencia()}€.")
 
 class PresupuestoExcedidoError(ErrorFinanzas):
     def __init__(self, categoria, limite_sobrepasado):
-        # Guardará la categoría del presupuesto y el límite que ha saltado.
-        pass
+        # Identifica la categoría y el límite que se ha sobrepasado
+        self.categoria = categoria
+        self.limite_sobrepasado = limite_sobrepasado
 
     def __str__(self):
-        # Mensaje de error avisando de que se ha roto el presupuesto de la categoría.
-        pass
+        # Notifica que se ha superado el tope de gasto establecido
+        return f"PresupuestoExcedidoError: La categoría '{self.categoria}' superó su límite de {self.limite_sobrepasado}€."
 

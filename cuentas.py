@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from excepciones import SaldoInsuficienteError, ImporteInvalidoError
 
 class Cuenta (ABC):
     #Creamos la clase abstracta  "Cuenta", para definir el comportamiento de cualquier cuenta '''
@@ -18,19 +19,23 @@ class Cuenta (ABC):
         # Utilizando en abstractmethod obligamos a las clases hijas a que implementen este metodo (cada una el suyo propio)
         pass
 
-    def registrar_transaccion(self,cantidad: float, descripcion: str = "")->None:
-        #Este metodo suma o resta dinero al saldo protegido y guarda el registro
+    def registrar_transaccion(self, cantidad: float, descripcion: str = "") -> None:
+        # Actualiza el saldo y guarda el registro en el historial
         self._saldo_actual += cantidad
         self._historial_transacciones.append(f'{descripcion} : {cantidad}')
 
-    def transferir(self, cantidad: float, cuenta_destino: 'Cuenta')-> None: # Realiza una transferencia a otra cuenta validando el saldo
-        if self._saldo_actual >= cantidad:
+    def transferir(self, cantidad: float, cuenta_destino: 'Cuenta') -> None:
+        # Valida que el importe sea positivo y haya saldo suficiente [cite: 22, 23, 178, 179]
+        if cantidad <= 0:
+            raise ImporteInvalidoError(cantidad)
 
-            self.registrar_transaccion(f"Transferencia enviada a {cuenta_destino.nombre}", -cantidad)
-            cuenta_destino.registrar_transaccion(f"Transferencia recibida de {self.nombre}", cantidad)
-            print(f"Transferencia de {cantidad}€ realizada con éxito.")
-        else:
-            print("Saldo insuficiente para realizar la transferencia.")
+        if self._saldo_actual < cantidad:
+            raise SaldoInsuficienteError(self._saldo_actual, cantidad)
+
+        # Ejecuta el movimiento de fondos entre ambas cuentas
+        self.registrar_transaccion(-cantidad, f"Transferencia a {cuenta_destino.nombre}")
+        cuenta_destino.registrar_transaccion(cantidad, f"Transferencia de {self.nombre}")
+        print(f"Transferencia de {cantidad}€ realizada con éxito.")
 
 
 
