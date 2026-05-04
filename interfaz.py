@@ -47,8 +47,10 @@ def ejecutar_interfaz(gestor):
                 origen = None
                 destino = None
                 for c in gestor:
-                    if c.nombre == origen_nom: origen = c
-                    if c.nombre == destino_nom: destino = c
+                    if c.nombre == origen_nom:
+                        origen = c
+                    if c.nombre == destino_nom:
+                        destino = c
 
                 if origen and destino:
                     origen.transferir(monto, destino)

@@ -1,5 +1,8 @@
 from abc import ABC, abstractmethod
+from typing import List
 from excepciones import SaldoInsuficienteError, ImporteInvalidoError
+from transacciones import Transaccion
+
 
 class Cuenta (ABC):
     #Creamos la clase abstracta  "Cuenta", para definir el comportamiento de cualquier cuenta '''
@@ -7,7 +10,7 @@ class Cuenta (ABC):
         self.nombre: str = nombre
         #Aquí lo que hacemos es proteger el saldo y el historial haciendolos privados
         self._saldo_actual: float = saldo_inicial
-        self._historial_transacciones: list[str] = []
+        self._historial_transacciones: List[Transaccion] = []
 
     @property
     def saldo(self)-> float:
@@ -19,10 +22,11 @@ class Cuenta (ABC):
         # Utilizando en abstractmethod obligamos a las clases hijas a que implementen este metodo (cada una el suyo propio)
         pass
 
-    def registrar_transaccion(self, cantidad: float, descripcion: str = "") -> None:
+    def registrar_transaccion(self, cantidad: float, descripcion: str = "", categoria = None) -> None:
         # Actualiza el saldo y guarda el registro en el historial
+        nueva_transaccion = Transaccion(descripcion, cantidad, categoria)
         self._saldo_actual += cantidad
-        self._historial_transacciones.append(f'{descripcion} : {cantidad}')
+        self._historial_transacciones.append(nueva_transaccion)
 
     def transferir(self, cantidad: float, cuenta_destino: 'Cuenta') -> None:
         # Valida que el importe sea positivo y haya saldo suficiente [cite: 22, 23, 178, 179]

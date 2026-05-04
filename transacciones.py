@@ -1,3 +1,5 @@
+from categorias import Categoria
+
 class Transaccion:
     def __init__(self, descripcion: str, cantidad: float, categoria: Categoria | None = None) -> None:
         # Atributos protegidos para asegurar el encapsulamiento

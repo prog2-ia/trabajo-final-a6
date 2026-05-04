@@ -1,58 +1,56 @@
+from typing import List
+from cuentas import Cuenta
+from presupuestos import Presupuesto
+
 class GestorFinanzas:
     def __init__(self) -> None:
         # Listas privadas para el almacenamiento de datos
-        self.__cuentas = []
-        self.__presupuestos = []
-        self.__categorias = []
+        self.__cuentas : List[Cuenta] = []
+        self.__presupuestos: List[Presupuesto] = []
 
-    def añadir_cuenta(self, cuenta):
+    def añadir_cuenta(self, cuenta: Cuenta):
         # Agrega una nueva cuenta a la lista del gestor
         self.__cuentas.append(cuenta)
+
+    def añadir_presupuesto(self, presupuesto: Presupuesto)-> None:
+        self.__presupuestos.append(presupuesto)
 
     def __getitem__(self, index):
         # Permite acceder a las cuentas por índice o usarlas en un bucle 'for'
         return self.__cuentas[index]
 
-    def __len__(self):
+    def __len__(self) -> int:
         # Devuelve la cantidad total de cuentas registradas
         return len(self.__cuentas)
 
-    def registrar_movimiento(self, nombre_cuenta, transaccion_desc, cantidad):
-        # Busca la cuenta mediante un bucle controlado por índice y condición
-        cuenta_encontrada = None
-        i = 0
-        while i < len(self.__cuentas) and cuenta_encontrada is None:
-            if self.__cuentas[i].nombre == nombre_cuenta:
-                cuenta_encontrada = self.__cuentas[i]
-            i += 1
-
-        # Si se localiza la cuenta, se procede al registro
-        if cuenta_encontrada:
-            cuenta_encontrada.registrar_transaccion(cantidad, transaccion_desc)
-        else:
-            print(f"Error: No se encontró la cuenta '{nombre_cuenta}'.")
+    def registrar_movimiento(self, nombre_cuenta: str, transaccion_desc: str, cantidad: float) -> None:
+        for cuenta in self.__cuentas:
+            if cuenta.nombre == nombre_cuenta:
+                cuenta.registrar_transaccion(cantidad, transaccion_desc)
+                return
+        print(f'Error: no se encontro la cuenta "{nombre_cuenta}".')
 
     def verificar_alertas(self):
-        # Identifica cuentas en negativo y genera el log de alertas
-        alertas = []
-        for c in self.__cuentas:
-            if c.saldo < 0:
-                alertas.append(f"¡Alerta! La cuenta '{c.nombre}' tiene saldo negativo: {c.saldo}€")
-
-        if alertas:
-            self.exportar_a_texto("alertas.log", "\n".join(alertas))
-        return alertas
+        try:
+            with open("alertas.log", "w", encoding="utf-8") as file:
+                for pres in self.__presupuestos:
+                    try:
+                        pres.verificar_estado()
+                    except Exception as e:
+                        file.write(f"ALERTA: {e}\n")
+                file.write("Verificación de alertas completada.\n")
+        except Exception as e:
+            print(f"Error procesando alertas: {e}")
 
     def generar_informe_mensual(self, mes, año):
-        # Crea un resumen de todas las cuentas en un archivo de texto
-        resumen = f"--- INFORME MENSUAL {mes}/{año} ---\n"
-        for cuenta in self.__cuentas:
-            resumen += f"Cuenta: {cuenta.nombre} | Saldo: {cuenta.saldo}€\n"
+        nombre_archivo = f"informe_{año}_{mes}.txt"
+        try:
+            with open(nombre_archivo, "w", encoding="utf-8") as file:
+                file.write(f"--- INFORME MENSUAL {mes}/{año} ---\n\n")
+                for cuenta in self.__cuentas:
+                    file.write(f"Cuenta: {cuenta.nombre} | Tipo: {cuenta.obtener_tipo()} | Saldo: {cuenta.saldo}€\n")
+        except Exception as e:
+            print(f"Error al generar el informe: {e}")
 
-        self.exportar_a_texto(f"informe_{año}_{mes}.txt", resumen)
 
-    def exportar_a_texto(self, nombre_archivo, datos):
-        # Escribe los datos proporcionados en un archivo físico
-        with open(nombre_archivo, "w", encoding="utf-8") as archivo:
-            archivo.write(datos)
 
