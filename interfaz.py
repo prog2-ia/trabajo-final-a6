@@ -33,11 +33,28 @@ def ejecutar_interfaz(gestor):
                 nombre = input("Nombre de la cuenta: ")
                 desc = input("Descripción del movimiento: ")
                 monto = float(input("Cantidad (positivo ingreso, negativo gasto): "))
-                gestor.registrar_movimiento(nombre, desc, monto)
+
+                cuenta_existe = False
+                for c in gestor:
+                    if c.nombre == nombre:
+                        cuenta_existe = True
+                        if monto < 0 and c.saldo < abs(monto):
+                            raise SaldoInsuficienteError(c.saldo, abs(monto))
+                        break
+                    if cuenta_existe:
+                        cat_input = input("Categoría del movimiinto (opcional, pulse Enter para ninguna): ").strip()
+                        nombre_categoria = cat_input if cat_input != "" else None
+                        gestor.registrar_movimiento(nombre, desc, monto)
+                        print("Movimiento registrado correctamente.")
+
+                    else:
+                        print(f'Error: no se encontro la cuenta "{nombre}".')
+
             except ValueError:
                 print("Error: El monto debe ser un número.")
-            except ImporteInvalidoError as e:
-                print(e)
+            except SaldoInsuficienteError as e:
+
+                print(f"Movimiento fallido: {e}")
 
         elif opcion == "3":
             try:
