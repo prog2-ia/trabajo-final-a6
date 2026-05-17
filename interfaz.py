@@ -1,4 +1,5 @@
 from excepciones import SaldoInsuficienteError, ImporteInvalidoError
+from cuentas import CuentaPrincipal, CuentaAhorro
 
 
 def mostrar_menu():
@@ -10,7 +11,8 @@ def mostrar_menu():
     print("2. Registrar nuevo movimiento")
     print("3. Realizar transferencia")
     print("4. Generar informe mensual")
-    print("5. Salir")
+    print("5. Añadir nueva cuenta")
+    print("6. Salir")
     return input("Seleccione una opción: ")
 
 
@@ -68,6 +70,43 @@ def ejecutar_interfaz(gestor):
             print("Informes generados (alertas.log e informe_2024_4.txt).")
 
         elif opcion == "5":
+            print("\n--- AÑADIR NUEVA CUENTA ---")
+            print("1. Cuenta Principal (Corriente)")
+            print("2. Cuenta de Ahorro")
+            tipo = input("Seleccione el tipo de cuenta: ")
+
+            if tipo not in ["1", "2"]:
+                print("Opción no válida. Volviendo al menú.")
+                continue
+
+            nombre = input("Nombre de la cuenta: ")
+
+            # Evitamos duplicados de nombres de cuenta
+            existe = False
+            for c in gestor:
+                if c.nombre.lower() == nombre.lower():
+                    existe = True
+                    break
+            if existe:
+                print("Error: Ya existe una cuenta con ese nombre.")
+                continue
+
+            try:
+                saldo_inicial = float(input("Saldo inicial (ej: 0.0): "))
+                if tipo == "1":
+                    nueva_cuenta = CuentaPrincipal(nombre, saldo_inicial)
+                    gestor.añadir_cuenta(nueva_cuenta)
+                    print(f"Cuenta Principal '{nombre}' añadida correctamente.")
+                elif tipo == "2":
+                    objetivo = float(input("Objetivo de ahorro: "))
+                    nueva_cuenta = CuentaAhorro(nombre, saldo_inicial, objetivo)
+                    gestor.añadir_cuenta(nueva_cuenta)
+                    print(f"Cuenta de Ahorro '{nombre}' añadida correctamente.")
+            except ValueError:
+                print("Error: Los valores de saldo u objetivo deben ser numéricos.")
+
+
+        elif opcion == "6":
             print("Saliendo del sistema...")
             continuar = False
         else:

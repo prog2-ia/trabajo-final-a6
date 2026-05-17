@@ -1,6 +1,8 @@
 from typing import List
 from cuentas import Cuenta
 from presupuestos import Presupuesto
+from excepciones import PresupuestoExcedidoError
+
 
 class GestorFinanzas:
     def __init__(self) -> None:
@@ -23,10 +25,28 @@ class GestorFinanzas:
         # Devuelve la cantidad total de cuentas registradas
         return len(self.__cuentas)
 
-    def registrar_movimiento(self, nombre_cuenta: str, transaccion_desc: str, cantidad: float) -> None:
+    def registrar_movimiento(self, nombre_cuenta: str, transaccion_desc: str, cantidad: float, nombre_categoria: str = None) -> None:
+        categoria_obj = None
+
+        # Si el usuario introduce una categoría, la buscamos en los presupuestos
+        if nombre_categoria:
+            for pres in self.__presupuestos:
+                if pres.categoria.nombre.lower() == nombre_categoria.lower():
+                    categoria_obj = pres.categoria
+
+                    # Si es un gasto (cantidad negativa), lo sumamos al presupuesto
+                    if cantidad < 0:
+                        try:
+                            # Pasamos el valor en positivo (absoluto) porque añadir_gasto exige > 0
+                            pres.añadir_gasto(abs(cantidad))
+                        except PresupuestoExcedidoError as e:
+                            # Capturamos la excepción y mostramos un aviso por consola
+                            print(f"\n  ¡ALERTA DE PRESUPUESTO! {e}")
+                        break  # Ya encontramos la categoría, salimos del bucle de presupuestos
+
         for cuenta in self.__cuentas:
             if cuenta.nombre == nombre_cuenta:
-                cuenta.registrar_transaccion(cantidad, transaccion_desc)
+                cuenta.registrar_transaccion(cantidad, transaccion_desc, categoria_obj)
                 return
         print(f'Error: no se encontro la cuenta "{nombre_cuenta}".')
 
