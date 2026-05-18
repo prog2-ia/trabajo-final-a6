@@ -1,6 +1,6 @@
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/09uckVan)
 
-# Gestor de Finanzas Personales 💰
+# Gestor de Finanzas Personales 
 
 ## 1. Propósito del Proyecto
 Este proyecto es una aplicación desarrollada en Python para la gestión integral de finanzas personales. Permite administrar diferentes tipos de cuentas bancarias, categorizar gastos e ingresos mediante una estructura jerárquica (padre-hijo), registrar transacciones y generar informes automatizados. 
